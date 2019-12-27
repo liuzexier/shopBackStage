@@ -3,7 +3,6 @@
         <el-row type="flex" class="title" justify="space-between">
             <el-col :span="9">
                 <div class="title-item">
-                    <!-- <el-button @click="addGoodsDialogShow = true" type="primary">添加商品</el-button> -->
                     <el-button type="primary" @click="choose">选择</el-button>
                     <!-- <el-button v-show="selectedRowIds.length!==0" @click="deleteRows(false)" type="danger" plain>下架</el-button>
                     <el-button v-show="selectedRowIds.length!==0" @click="deleteRows(true)" type="success" plain>上架</el-button> -->
