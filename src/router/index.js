@@ -7,28 +7,28 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /**
- * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
+ *注意：子菜单仅在路由children.length> = 1时出现
+ *详细信息请参见：https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
  *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
- * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+ *隐藏：如果设置为true，则为true，则项目不会显示在边栏中（默认为false）
+ *alwaysShow：如果设置为true，则将始终显示根菜单
+ *如果未设置alwaysShow，则当项有多个子路线时，
+ *它将变为嵌套模式，否则不显示根菜单
+ *redirect：noRedirect如果设置了noRedirect将不会在面包屑中重定向
+ *name：“路由器名称”，该名称由<keep-alive>使用（必须设置！！！）
+ *meta：{
+    角色：['admin'，'editor']控制页面角色（您可以设置多个角色）
+    title：“ title”名称显示在侧边栏和面包屑中（推荐设置）
+    图标：'svg-name'图标显示在侧栏中
+    面包屑：如果设置为false，则该项将隐藏在面包屑中（默认值为true）
+    activeMenu：如果设置了路径，则为“ /example /list”，边栏将突出显示您设置的路径
   }
  */
 
 /**
- * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
+ *constantRoutes
+ *没有权限要求的基本页面
+ *可以访问所有角色
  */
 export const constantRoutes = [
     {
@@ -59,19 +59,19 @@ export const constantRoutes = [
         component: Layout,
         redirect: '/goodsmanage/table',
         name: 'Goodsmanage',
-        meta: { title: '商品', icon: 'nested' },
+        meta: { title: '商品', icon: 'form' },
         children: [
             {
                 path: 'table',
                 name: 'Table',
                 component: () => import('@/views/goods/index.vue'),
-                meta: { title: '商品管理', icon: 'table' }
+                meta: { title: '商品管理', icon: '' }
             },
             {
                 path: 'type',
                 name: 'Type',
                 component: () => import('@/views/goodstype/index.vue'),
-                meta: { title: '商品类别管理', icon: 'tree' }
+                meta: { title: '商品类别管理', icon: '' }
             }
         ]
     },
@@ -81,92 +81,37 @@ export const constantRoutes = [
         component: Layout,
         redirect: '/user/list',
         name: 'User',
-        meta: { title: '用户管理', icon: 'nested' },
+        meta: { title: '用户', icon: 'user' },
         children: [
             {
                 path: 'list',
                 name: 'list',
                 component: () => import('@/views/user/index.vue'),
-                meta: { title: '用户管理', icon: 'form' }
+                meta: { title: '用户管理', icon: '' }
             },
             {
                 path: 'cart',
                 name: 'Cart',
                 component: () => import('@/views/cart/index'),
-                meta: { title: '购物车管理', icon: 'form' }
+                meta: { title: '购物车管理', icon: '' }
             }
         ]
     },
-
     {
-        path: '/nested',
+        path: '/order',
         component: Layout,
-        redirect: '/nested/menu1',
-        name: 'Nested',
-        meta: {
-            title: 'Nested',
-            icon: 'nested'
-        },
+        redirect: '/order/list',
+        name: 'Order',
+        meta: { title: '订单', icon: 'nested' },
         children: [
             {
-                path: 'menu1',
-                component: () => import('@/views/nested/menu1/index'), // Parent router-view
-                name: 'Menu1',
-                meta: { title: 'Menu1' },
-                children: [
-                    {
-                        path: 'menu1-1',
-                        component: () => import('@/views/nested/menu1/menu1-1'),
-                        name: 'Menu1-1',
-                        meta: { title: 'Menu1-1' }
-                    },
-                    {
-                        path: 'menu1-2',
-                        component: () => import('@/views/nested/menu1/menu1-2'),
-                        name: 'Menu1-2',
-                        meta: { title: 'Menu1-2' },
-                        children: [
-                            {
-                                path: 'menu1-2-1',
-                                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                                name: 'Menu1-2-1',
-                                meta: { title: 'Menu1-2-1' }
-                            },
-                            {
-                                path: 'menu1-2-2',
-                                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                                name: 'Menu1-2-2',
-                                meta: { title: 'Menu1-2-2' }
-                            }
-                        ]
-                    },
-                    {
-                        path: 'menu1-3',
-                        component: () => import('@/views/nested/menu1/menu1-3'),
-                        name: 'Menu1-3',
-                        meta: { title: 'Menu1-3' }
-                    }
-                ]
-            },
-            {
-                path: 'menu2',
-                component: () => import('@/views/nested/menu2/index'),
-                meta: { title: 'menu2' }
+                path: 'list',
+                name: 'list',
+                component: () => import('@/views/order/index.vue'),
+                meta: { title: '订单管理', icon: '' }
             }
         ]
     },
-
-    {
-        path: 'external-link',
-        component: Layout,
-        children: [
-            {
-                path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-                meta: { title: 'External Link', icon: 'link' }
-            }
-        ]
-    },
-
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/404', hidden: true }
 ]
@@ -179,7 +124,6 @@ const createRouter = () => new Router({
 
 const router = createRouter()
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
     const newRouter = createRouter()
     router.matcher = newRouter.matcher // reset router
