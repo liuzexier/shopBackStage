@@ -33,3 +33,11 @@ export function logout() {
         method: 'post'
     })
 }
+
+export function register(data) {
+    return request({
+        url: '/admins/signup',
+        method: 'post',
+        data
+    })
+}

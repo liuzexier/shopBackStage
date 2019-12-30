@@ -1,37 +1,59 @@
 <template>
-    <div class="login-container">
-        <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <div>
+        <div class="login-container">
+            <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
-            <div class="title-container">
-                <h3 class="title">Signin Form</h3>
+                <div class="title-container">
+                    <h3 class="title">Signin Form</h3>
+                </div>
+
+                <el-form-item prop="username">
+                    <span class="svg-container">
+                        <svg-icon icon-class="user" />
+                    </span>
+                    <el-input ref="username" v-model="loginForm.username" placeholder="Username" name="username" type="text" tabindex="1" auto-complete="on" />
+                </el-form-item>
+
+                <el-form-item prop="password">
+                    <span class="svg-container">
+                        <svg-icon icon-class="password" />
+                    </span>
+                    <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType" placeholder="Password" name="password" tabindex="2" auto-complete="on" @keyup.enter.native="handleLogin" />
+                    <span class="show-pwd" @click="showPwd">
+                        <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+                    </span>
+                </el-form-item>
+                <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
+                <a style="color:#409EFF" @click.prevent="handleRegister">注册</a>
+            </el-form>
+        </div>
+        <el-dialog title="注册" :visible.sync="dialogFormVisible">
+            <el-form ref="regform" :rules="rules" v-model="register">
+                <el-form-item label="电话号码" :label-width="'100px'">
+                    <el-input v-model="register.phone" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="用户名" :label-width="'100px'">
+                    <el-input v-model="register.name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="password" :label-width="'100px'">
+                    <el-input type="password" v-model="register.password" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="确认密码" prop="repassword" :label-width="'100px'">
+                    <el-input type="password" v-model="register.repassword" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="toRegister">确 定</el-button>
             </div>
+        </el-dialog>
 
-            <el-form-item prop="username">
-                <span class="svg-container">
-                    <svg-icon icon-class="user" />
-                </span>
-                <el-input ref="username" v-model="loginForm.username" placeholder="Username" name="username" type="text" tabindex="1" auto-complete="on" />
-            </el-form-item>
-
-            <el-form-item prop="password">
-                <span class="svg-container">
-                    <svg-icon icon-class="password" />
-                </span>
-                <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType" placeholder="Password" name="password" tabindex="2" auto-complete="on" @keyup.enter.native="handleLogin" />
-                <span class="show-pwd" @click="showPwd">
-                    <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-                </span>
-            </el-form-item>
-
-            <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-
-        </el-form>
     </div>
 </template>
 
 <script>
 import { validUsername } from '@/utils/validate'
-import { login } from '@/api/user.js'
+import { login, register } from '@/api/user.js'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 export default {
@@ -53,27 +75,42 @@ export default {
                 callback()
             }
         }
+        let validatePass = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入密码'))
+            } else {
+                if (this.register.repassword !== '') {
+                    this.$refs.regform.validateField('checkPass')
+                }
+                callback()
+            }
+        }
+        let validatePass2 = (rule, value, callback) => {
+            if (this.register.repassword === '') {
+                callback(new Error('请再次输入密码'))
+            } else if (this.register.repassword !== this.register.password) {
+                callback(new Error('两次输入密码不一致!'))
+            } else {
+                callback()
+            }
+        }
         return {
+            rules: {
+                password: [{ validator: validatePass, trigger: 'blur' }],
+                repassword: [{ validator: validatePass2, trigger: 'blur' }]
+            },
+            register: {
+                phone: '',
+                password: '',
+                name: '',
+                repassword: ''
+            },
+            dialogFormVisible: false,
             loginForm: {
                 username: 'admin',
                 password: '111111'
             },
-            loginRules: {
-                // username: [
-                //     {
-                //         required: true,
-                //         trigger: 'blur',
-                //         validator: validateUsername
-                //     }
-                // ],
-                // password: [
-                //     {
-                //         required: true,
-                //         trigger: 'blur',
-                //         validator: validatePassword
-                //     }
-                // ]
-            },
+            loginRules: {},
             loading: false,
             passwordType: 'password',
             redirect: undefined
@@ -88,6 +125,26 @@ export default {
         }
     },
     methods: {
+        handleRegister() {
+            this.dialogFormVisible = true
+        },
+        toRegister() {
+            this.$refs.loginForm.validate(valid => {
+                if (valid) {
+                    register({
+                        phone: this.register.phone,
+                        password: this.register.password,
+                        name: this.register.name
+                    }).then(res => {
+                        console.log(res)
+                        if (res.status === 1) {
+                            this.$message.success('注册成功')
+                            this.dialogFormVisible = false
+                        }
+                    })
+                }
+            })
+        },
         showPwd() {
             if (this.passwordType === 'password') {
                 this.passwordType = ''
