@@ -162,7 +162,7 @@ export default {
         },
         getTableDataTypes() {
             getGoodsByType({
-                id: this.selectedType,
+                typeid: this.selectedType,
                 page: this.page,
                 pageSize: this.pageSize
             }).then(res => {
