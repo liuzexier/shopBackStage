@@ -1,6 +1,5 @@
-export default {
-
-  title: 'Vue Admin Template',
+module.exports = {
+  title: '后台管理',
 
   /**
    * @type {boolean} true | false
