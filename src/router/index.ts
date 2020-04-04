@@ -30,6 +30,7 @@ import Layout from '@/layout/index.vue'
  *没有权限要求的基本页面
  *可以访问所有角色
  */
+import { storeRouter } from '@/views/store/store.router.ts'
 export const constantRoutes = [
     {
         path: '/login',
@@ -54,6 +55,7 @@ export const constantRoutes = [
             meta: { title: '仪表盘', icon: 'dashboard' }
         }]
     },
+    ...storeRouter,
     {
         path: '/goodsmanage',
         component: Layout,
@@ -75,7 +77,6 @@ export const constantRoutes = [
             }
         ]
     },
-
     {
         path: '/user',
         component: Layout,

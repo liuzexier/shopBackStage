@@ -24,6 +24,10 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
+  transpileDependencies: [
+    'vue-echarts',
+    'resize-detector'
+  ],
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',

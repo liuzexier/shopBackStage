@@ -1,30 +1,40 @@
 <template>
-  <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
-  </div>
+    <div class="dashboard-container">
+        <!-- <vue-echarts class="echarts" ref="chart1" :options="orgOptions" :auto-resize="true"></vue-echarts> -->
+    </div>
 </template>
-
-<script>
-import { mapGetters } from 'vuex'
-
-export default {
-  name: 'Dashboard',
-  computed: {
-    ...mapGetters([
-      'name'
-    ])
-  }
+<script lang ='ts'>
+import { Vue, Prop, Component } from 'vue-property-decorator'
+@Component({
+    components: {}
+})
+export default class Dashboard extends Vue {
+    private orgOptions: any = {}
+    mounted() {
+        this.orgOptions = {
+            xAxis: {
+                type: 'category',
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    data: [820, 932, 901, 934, 1290, 1330, 1320],
+                    type: 'line',
+                    smooth: true
+                }
+            ]
+        }
+    }
 }
 </script>
-
-<style lang="scss" scoped>
-.dashboard {
-  &-container {
-    margin: 30px;
-  }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
-  }
+<style lang='less' scoped>
+.dashboard-container {
+    .echarts {
+        width: 300px;
+        height: 200px;
+    }
 }
 </style>
