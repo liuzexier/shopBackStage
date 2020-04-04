@@ -21,10 +21,10 @@
     </div>
 </template>
 <script>
-import { table_mixin } from '@/mixins/table-mixin.js'
+import { table_mixin } from '@/mixins/table-mixin'
 import orderTable from '@/views/order/order-table/index.vue'
 import orderDialog from '@/views/order/order-dialog/index.vue'
-import { findOrderByPage, findOrderByUsername } from '@/api/order.js'
+import { findOrderByPage, findOrderByUsername } from '@/api/order'
 export default {
     mixins: [table_mixin],
     name: 'Order',

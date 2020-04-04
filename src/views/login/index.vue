@@ -2,18 +2,15 @@
     <div>
         <div class="login-container">
             <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
                 <div class="title-container">
-                    <h3 class="title">Signin Form</h3>
+                    <h3 class="title">Signin</h3>
                 </div>
-
                 <el-form-item prop="username">
                     <span class="svg-container">
                         <svg-icon icon-class="user" />
                     </span>
                     <el-input ref="username" v-model="loginForm.username" placeholder="Username" name="username" type="text" tabindex="1" auto-complete="on" />
                 </el-form-item>
-
                 <el-form-item prop="password">
                     <span class="svg-container">
                         <svg-icon icon-class="password" />
@@ -24,22 +21,19 @@
                     </span>
                 </el-form-item>
                 <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
-                <a style="color:#409EFF" @click.prevent="handleRegister">注册</a>
+                <a style="color:#409EFF" @click.prevent="handleRegister">商家注册</a>
             </el-form>
         </div>
-        <el-dialog title="注册" :visible.sync="dialogFormVisible">
+        <el-dialog title="注册" class="dialog" :visible.sync="dialogFormVisible">
             <el-form ref="regform" :rules="rules" v-model="register">
-                <el-form-item label="电话号码" :label-width="'100px'">
-                    <el-input v-model="register.phone" autocomplete="off"></el-input>
+                <el-form-item label="邮箱" :label-width="'100px'">
+                    <el-input v-model="register.userAccount" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="用户名" :label-width="'100px'">
-                    <el-input v-model="register.name" autocomplete="off"></el-input>
+                    <el-input v-model="register.userName" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password" :label-width="'100px'">
-                    <el-input type="password" v-model="register.password" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="确认密码" prop="repassword" :label-width="'100px'">
-                    <el-input type="password" v-model="register.repassword" autocomplete="off"></el-input>
+                    <el-input type="password" v-model="register.userPassword" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -53,62 +47,23 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
-import { login, register } from '@/api/user.js'
+import { login, register } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-
+import aesUtil from '@/utils/aes'
 export default {
     name: 'Login',
     data() {
-        const validateUsername = (rule, value, callback) => {
-            if (!validUsername(value)) {
-                callback(new Error('Please enter the correct user name'))
-            } else {
-                callback()
-            }
-        }
-        const validatePassword = (rule, value, callback) => {
-            if (value.length < 6) {
-                callback(
-                    new Error('The password can not be less than 6 digits')
-                )
-            } else {
-                callback()
-            }
-        }
-        let validatePass = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入密码'))
-            } else {
-                if (this.register.repassword !== '') {
-                    this.$refs.regform.validateField('checkPass')
-                }
-                callback()
-            }
-        }
-        let validatePass2 = (rule, value, callback) => {
-            if (this.register.repassword === '') {
-                callback(new Error('请再次输入密码'))
-            } else if (this.register.repassword !== this.register.password) {
-                callback(new Error('两次输入密码不一致!'))
-            } else {
-                callback()
-            }
-        }
         return {
-            rules: {
-                password: [{ validator: validatePass, trigger: 'blur' }],
-                repassword: [{ validator: validatePass2, trigger: 'blur' }]
-            },
+            rules: {},
             register: {
-                phone: '',
-                password: '',
-                name: '',
-                repassword: ''
+                userAccount: '',
+                userName: '',
+                userPassword: ''
             },
             dialogFormVisible: false,
             loginForm: {
-                username: 'admin',
-                password: '111111'
+                username: '123',
+                password: '12345'
             },
             loginRules: {},
             loading: false,
@@ -118,7 +73,7 @@ export default {
     },
     watch: {
         $route: {
-            handler: function(route) {
+            handler: function (route) {
                 this.redirect = route.query && route.query.redirect
             },
             immediate: true
@@ -132,13 +87,13 @@ export default {
             this.$refs.loginForm.validate(valid => {
                 if (valid) {
                     register({
-                        phone: this.register.phone,
-                        password: this.register.password,
-                        name: this.register.name
+                        userAccount: this.register.userAccount,
+                        userPassword: this.register.userPassword,
+                        userName: this.register.userName,
+                        userType: 2
                     }).then(res => {
-                        console.log(res)
-                        if (res.status === 1) {
-                            this.$message.success('注册成功')
+                        if (res.resultCode === 'Success') {
+                            this.$message.success(res.msg)
                             this.dialogFormVisible = false
                         }
                     })
@@ -160,30 +115,18 @@ export default {
                 if (valid) {
                     this.loading = true
                     login({
-                        phone: this.loginForm.username,
-                        email: this.loginForm.username,
-                        password: this.loginForm.password
+                        userAccount: this.loginForm.username,
+                        userPassword: aesUtil.encrypt(this.loginForm.password)
                     })
                         .then(res => {
                             // console.log(res)
-                            if (res.status === 1) {
-                                this.$store
-                                    .dispatch('user/signin', res.data)
-                                    .then(() => {
-                                        this.$message({
-                                            message: res.msg,
-                                            type: 'success'
-                                        })
-                                        this.loading = false
-                                        this.$router.push({
-                                            path: this.redirect || '/',
-                                            query: this.otherQuery
-                                        })
-                                    })
+                            if (res.resultCode === 'Success') {
+                                window.sessionStorage.setItem('token', res.dataSet.token)
                             } else {
-                                this.loading = false
                                 this.$message.error(`登录失败:${res.msg}`)
                             }
+                            this.$router.push(this.$route.redirect || '/')
+                            this.loading = false
                         })
                         .catch(err => {
                             this.loading = false
@@ -215,6 +158,10 @@ $cursor: #fff;
 
 /* reset element-ui css */
 .login-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background-image: url('');
     .el-input {
         display: inline-block;
         height: 47px;
@@ -306,6 +253,11 @@ $light_gray: #eee;
         color: $dark_gray;
         cursor: pointer;
         user-select: none;
+    }
+}
+.dialog {
+    /deep/.el-dialog {
+        width: 500px;
     }
 }
 </style>

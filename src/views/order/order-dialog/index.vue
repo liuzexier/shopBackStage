@@ -19,7 +19,7 @@
     </div>
 </template>
 <script>
-import { updateOrderStatus } from '@/api/order.js'
+import { updateOrderStatus } from '@/api/order'
 export default {
     name: 'OrderDialog',
     props: {

@@ -23,9 +23,9 @@
     </div>
 </template>
 <script>
-import { table_mixin } from '@/mixins/table-mixin.js'
+import { table_mixin } from '@/mixins/table-mixin'
 import cartTable from '@/views/cart/cart-table/index.vue'
-import { findAllCartByPage, findCartByName } from '@/api/cart.js'
+import { findAllCartByPage, findCartByName } from '@/api/cart'
 export default {
     name: 'Cart',
     mixins: [table_mixin],
@@ -52,7 +52,7 @@ export default {
                 this.tableData = res.data.rows
             })
         },
-        pageSizeChange() {},
+        pageSizeChange() { },
         pageNumberChange() {
             this.findCartByPage(this.page)
         },

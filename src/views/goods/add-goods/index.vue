@@ -46,7 +46,7 @@
     </div>
 </template>
 <script>
-import { addGoods } from '@/api/goods.js'
+import { addGoods } from '@/api/goods'
 export default {
     name: 'add-goods',
     props: {

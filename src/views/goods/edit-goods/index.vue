@@ -46,7 +46,7 @@
     </div>
 </template>
 <script>
-import { updateGoods, getGoodsById } from '@/api/goods.js'
+import { updateGoods, getGoodsById } from '@/api/goods'
 export default {
     name: 'edit-goods',
     props: {

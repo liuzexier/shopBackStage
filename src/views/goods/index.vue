@@ -45,13 +45,13 @@
 import goodsTable from '@/views/goods/goods-table/index.vue'
 import addGoods from '@/views/goods/add-goods/index.vue'
 import editGoods from '@/views/goods/edit-goods/index.vue'
-import { table_mixin } from '@/mixins/table-mixin.js'
+import { table_mixin } from '@/mixins/table-mixin'
 import {
     findGoodsByPage,
     deleteGoodsById,
     getTypeList,
     getGoodsByType
-} from '@/api/goods.js'
+} from '@/api/goods'
 export default {
     mixins: [table_mixin],
     name: 'Goodsmanage',

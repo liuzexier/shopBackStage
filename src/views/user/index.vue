@@ -22,8 +22,8 @@
 </template>
 <script>
 import userTable from '@/views/user/user-table/user-table.vue'
-import { table_mixin } from '@/mixins/table-mixin.js'
-import { findAllUser } from '@/api/user.js'
+import { table_mixin } from '@/mixins/table-mixin'
+import { findAllUser } from '@/api/user'
 export default {
     mixins: [table_mixin],
     name: 'List',

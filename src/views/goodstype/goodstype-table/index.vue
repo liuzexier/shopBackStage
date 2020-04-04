@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { deleteTypeById, updateTypeById } from '@/api/goods.js'
+import { deleteTypeById, updateTypeById } from '@/api/goods'
 export default {
     name: 'goods-table',
     props: {

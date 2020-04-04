@@ -19,7 +19,7 @@
 </template>
 <script>
 import goodsTypeTable from '@/views/goodstype/goodstype-table/index.vue'
-import { getTypeList, addType } from '@/api/goods.js'
+import { getTypeList, addType } from '@/api/goods'
 export default {
     name: 'goods-type',
     data() {

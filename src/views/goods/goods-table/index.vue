@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { deleteGoodsById } from '@/api/goods.js'
+import { deleteGoodsById } from '@/api/goods'
 export default {
     name: 'goods-table',
     props: {
