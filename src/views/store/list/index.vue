@@ -6,31 +6,29 @@
             </el-col>
         </el-row>
         <el-row class="center">
-            <el-col :span="5" v-for="(item,index) in tableData" :key="item.id" :offset="index%4>0?1:0">
-                <el-card class="card" shadow="hover" :body-style="{ padding: '0px' }">
-                    <div class="edit" @click="handleEdit(item)">
-                        <svg-icon style="width:100%;height:100%;" icon-class="icon-edit" />
-                    </div>
-                    <!-- <img :src="item.Image.imagePath|download" class="image"> -->
-                    <el-image class="image" :src="item.Image.imagePath|download" fit="cover"></el-image>
-                    <!-- <video class="image" :src="item.Image.imagePath|download"></video> -->
-                    <div style="padding: 14px;">
-                        <span>{{item.storeName}}</span>
-                        <div class="bottom clearfix">
+            <el-card :span="5" v-for="item in tableData" :key="item.id" class="card" shadow="hover" :body-style="{ padding: '0px' }">
+                <div class="edit" @click="handleEdit(item)">
+                    <svg-icon style="width:100%;height:100%;" icon-class="icon-edit" />
+                </div>
+                <el-image class="image" :src="$downloadUrl + item.Image.imagePath" fit="cover"></el-image>
+                <div style="padding: 14px;">
+                    <span>{{item.storeName}}</span>
+                    <div class="bottom clearfix">
+                        <router-link :to="'desc/' + item.id">
                             <el-button type="text" class="button">进入店铺</el-button>
-                            <el-tooltip class="item" effect="dark" :content="item.storeDesc" placement="top">
-                                <time class="time">{{item.storeDesc}}</time>
-                            </el-tooltip>
-                        </div>
+                        </router-link>
+                        <el-tooltip class="item" effect="dark" :content="item.storeDesc" placement="top">
+                            <time class="time">{{item.storeDesc}}</time>
+                        </el-tooltip>
                     </div>
-                </el-card>
-            </el-col>
+                </div>
+            </el-card>
         </el-row>
         <div class="pagination">
             <el-pagination @size-change="handleSizeChange" :current-page.sync="page" :page-size.sync="pageSize" @current-change="handleCurrentChange" background layout="total, prev, pager, next" :total="count">
             </el-pagination>
         </div>
-        <add-store-dialog v-if="dialogVisible" :dialogVisible.sync="dialogVisible"></add-store-dialog>
+        <add-store-dialog v-if="dialogVisible" :dialogVisible.sync="dialogVisible" :storeData="storeData"></add-store-dialog>
     </div>
 </template>
 <script lang ='ts'>
@@ -47,6 +45,7 @@ export default class StoreList extends TableMixin {
     private currentDate: Date = new Date()
     private tableData: any[] = []
     private dialogVisible: boolean = false
+    private storeData: any = null
 
     created() {
         this.pageSize = 8
@@ -59,13 +58,15 @@ export default class StoreList extends TableMixin {
             this.getTableData()
         }
     }
-    
+
     handleAdd() {
+        this.storeData = null
         this.dialogVisible = true
     }
 
     handleEdit(item: any) {
-        console.log(item)
+        this.storeData = item
+        this.dialogVisible = true
     }
 
     getTableData() {
@@ -89,10 +90,16 @@ export default class StoreList extends TableMixin {
     }
     .center {
         margin-top: 10px;
+        // display: flex;
         .card {
+            display: inline-block;
+            margin-right: 20px;
             margin-bottom: 20px;
             position: relative;
+            width: 200px;
             .edit {
+                border-radius: 50%;
+                background-color: rgba(255, 255, 255, 0.4);
                 cursor: pointer;
                 position: absolute;
                 z-index: 1;

@@ -13,3 +13,17 @@ export function createStore(data: any) {
         data
     })
 }
+export function updateStore(data: any) {
+    return request({
+        url: `store/`,
+        method: 'put',
+        data
+    })
+}
+export function deleteStores(data: any) {
+    return request({
+        url: `store/`,
+        method: 'delete',
+        data
+    })
+}

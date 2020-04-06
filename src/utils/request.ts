@@ -13,11 +13,21 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
     config => {
+        if (
+            config.method === "post" ||
+            config.method === "put" ||
+            config.method === "delete"
+        ) {
+            // 序列化
+            // if (!config.headers['Content-Type']) {
+            //   config.data = qs.stringify(config.data)
+            // }
+            config.headers["Content-Type"] = "application/json";
+        }
         // do something before request is sent
-        config.data = Qs.stringify(config.data)
-        let token = window.sessionStorage.getItem('token')
+        const token: string | null = window.sessionStorage.getItem('token')
         if (token) {
-            config.headers['Authorization'] = token
+            config.headers.Authorization = token
         }
         return config
     },

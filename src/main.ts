@@ -13,6 +13,10 @@ import 'echarts/lib/component/tooltip'
 import moment from 'moment'//导入moment
 import '@/icons' // icon
 import '@/permission' // permission control
+import { downloadUrl, uploadUrl } from '@/config'
+Vue.prototype.$downloadUrl = downloadUrl
+Vue.prototype.$uploadUrl = uploadUrl
+
 // import 'echarts-gl'
 Vue.component('vue-echarts', ECharts)
 
@@ -22,12 +26,6 @@ if (process.env.NODE_ENV === 'production') {
 
 Vue.filter('date-filter', (value: any) => {
     return moment(new Date(value).valueOf()).format('YYYY-MM-DD HH:mm:ss')
-})
-Vue.filter('upload', (value: string) => {
-    return 'http://localhost:5000/api/upload'
-})
-Vue.filter('download', (value: string) => {
-    return 'http://localhost:5000' + value
 })
 
 // 如果想要中文版 element-ui，按如下方式声明

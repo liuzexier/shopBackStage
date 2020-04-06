@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-Vue.use(Router)
-
 /* Layout */
 import Layout from '@/layout/index.vue'
 
@@ -31,6 +29,8 @@ import Layout from '@/layout/index.vue'
  *可以访问所有角色
  */
 import { storeRouter } from '@/views/store/store.router.ts'
+
+Vue.use(Router)
 export const constantRoutes = [
     {
         path: '/login',
