@@ -27,3 +27,10 @@ export function deleteStores(data: any) {
         data
     })
 }
+
+export function getGoodsByStoreAndType(params: any) {
+    return request({
+        url: `type/store/${params.page}/${params.pageSize}/${params.storeId || null}/${params.typeId || null}/${params.commodityName || null}`,
+        method: 'get'
+    })
+}
