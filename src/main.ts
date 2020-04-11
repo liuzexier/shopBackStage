@@ -27,7 +27,15 @@ if (process.env.NODE_ENV === 'production') {
 Vue.filter('date-filter', (value: any) => {
     return moment(new Date(value).valueOf()).format('YYYY-MM-DD HH:mm:ss')
 })
-
+Vue.filter('discount', (value: any) => {
+    value = 1 - Number(value)
+    return value * 100
+})
+Vue.filter('previewFilter', (list: any[]) => {
+    return list.map((item: any) => {
+        return downloadUrl + item.imagePath
+    })
+})
 // 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI)
 

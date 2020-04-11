@@ -9,4 +9,5 @@ import { Vue, Prop, Component } from 'vue-property-decorator'
 export default class App extends Vue {}
 </script>
 <style lang="less">
+@import url('./assets/css/reset.less');
 </style>

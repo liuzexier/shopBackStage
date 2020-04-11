@@ -28,9 +28,10 @@ export function deleteStores(data: any) {
     })
 }
 
-export function getGoodsByStoreAndType(params: any) {
+export function getGoodsByStoreAndType(params: any, query: any) {
     return request({
-        url: `type/store/${params.page}/${params.pageSize}/${params.storeId || null}/${params.typeId || null}/${params.commodityName || null}`,
-        method: 'get'
+        url: `/commodity/get/${params.page}/${params.pageSize}/${params.storeId}`,
+        method: 'get',
+        params: query
     })
 }
