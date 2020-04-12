@@ -14,3 +14,10 @@ export function deleteCommoditys(data: any) {
         data
     })
 }
+export function updateCommoditys(data: any) {
+    return request({
+        url: 'commodity/update',
+        method: 'put',
+        data
+    })
+}

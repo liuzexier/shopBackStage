@@ -29,7 +29,8 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button v-if="dataInfo.id" @click="deleteCommodity" type="danger">删除</el-button>
-                <el-button type="primary" @click="onSubmit">立即创建</el-button>
+                <el-button type="primary" v-if="!dataInfo.id" @click="onSubmit">立即创建</el-button>
+                <el-button type="primary" v-else @click="onUpdate">修改</el-button>
                 <el-button @click="handleClose">取消</el-button>
             </div>
         </el-dialog>
@@ -37,7 +38,11 @@
 </template>
 <script lang ='ts'>
 import { Vue, Prop, Component, Emit } from 'vue-property-decorator'
-import { createCommodity, deleteCommoditys } from '@/api/commodity.ts'
+import {
+    createCommodity,
+    deleteCommoditys,
+    updateCommoditys
+} from '@/api/commodity.ts'
 @Component({})
 export default class AddGoodsDialog extends Vue {
     // @Prop() title!: string
@@ -111,7 +116,7 @@ export default class AddGoodsDialog extends Vue {
     }
 
     deleteCommodity() {
-        this.$confirm('此操作将永久删除店铺, 是否继续?', '提示', {
+        this.$confirm('此操作将删除商品, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
@@ -126,6 +131,17 @@ export default class AddGoodsDialog extends Vue {
                 this.handleClose()
             })
             .catch(() => {})
+    }
+
+    onUpdate() {
+        updateCommoditys({
+            commodityId: this.dataInfo.id,
+            ...this.formData,
+            storeId: this.$route.params.id
+        }).then((res: any) => {
+            this.$message.success(res.msg || '修改成功')
+            this.handleClose()
+        })
     }
 
     @Emit('update:dialogVisible')
