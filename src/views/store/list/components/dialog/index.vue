@@ -1,6 +1,6 @@
 <template>
     <div class="addstoredialog-container">
-        <el-dialog title="新建店铺" :visible.sync="dialogVisible" width="500px" :before-close="handleClose">
+        <el-dialog :title="title" :visible.sync="dialogVisible" width="500px" :before-close="handleClose">
             <el-form ref="form" :model="form" label-width="80px">
                 <el-form-item label="店铺名称">
                     <el-input v-model="form.storeName"></el-input>
@@ -9,7 +9,9 @@
                     <el-input type="textarea" v-model="form.storeDesc"></el-input>
                 </el-form-item>
                 <el-form-item label="店铺图片">
-                    <el-upload :action="$uploadUrl" :file-list="fileList" list-type="picture-card" :on-success="handleSuccess" :on-remove="handleRemove" accept="image/png, image/jpeg" :limit="1" :multiple="false">
+                    <el-upload :action="$uploadUrl" :file-list="fileList" list-type="picture-card"
+                        :on-success="handleSuccess" :on-remove="handleRemove" accept="image/png, image/jpeg" :limit="1"
+                        :multiple="false">
                         <i class="el-icon-plus"></i>
                     </el-upload>
                 </el-form-item>
@@ -31,6 +33,7 @@ export default class AddStoreDialog extends Vue {
     @Prop() storeData!: any
 
     private fileList: any[] = []
+    private title: string = ''
 
     @Emit('update:dialogVisible')
     handleClose() {
@@ -46,14 +49,19 @@ export default class AddStoreDialog extends Vue {
 
     created() {
         if (this.storeData) {
+            this.title = '修改店铺'
             this.form.storeName = this.storeData.storeName
             this.form.storeDesc = this.storeData.storeDesc
-            this.form.imageName = this.storeData.Image.imageName
-            this.form.imagePath = this.storeData.Image.imagePath
-            this.fileList[0] = {
-                name: this.storeData.Image.imageName,
-                url: this.$downloadUrl + this.storeData.Image.imagePath
+            if (this.storeData.Image) {
+                this.form.imageName = this.storeData.Image.imageName
+                this.form.imagePath = this.storeData.Image.imagePath
+                this.fileList[0] = {
+                    name: this.storeData.Image.imageName,
+                    url: this.$downloadUrl + this.storeData.Image.imagePath
+                }
             }
+        } else {
+            this.title = '新建店铺'
         }
     }
 
@@ -85,7 +93,7 @@ export default class AddStoreDialog extends Vue {
     submit() {
         if (this.storeData) {
             updateStore({
-                imageId: this.storeData.Image.id,
+                imageId: this.storeData.Image ? this.storeData.Image.id : null,
                 storeId: this.storeData.id,
                 storeName: this.form.storeName,
                 storeDesc: this.form.storeDesc,

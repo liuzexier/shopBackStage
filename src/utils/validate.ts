@@ -15,6 +15,7 @@ export function isExternal(path: any) {
  * @returns {Boolean}
  */
 export function validUsername(str: string) {
-  const valid_map = ['admin', 'editor']
+  // eslint-disable-next-line camelcase
+  const valid_map: string[] = ['admin', 'editor']
   return valid_map.indexOf(str.trim()) >= 0
 }

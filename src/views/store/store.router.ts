@@ -5,7 +5,7 @@ export const storeRouter = [
         component: Layout,
         redirect: '/store/list',
         name: 'Store',
-        meta: { title: '店铺', icon: 'nested' },
+        meta: { title: '店铺' },
         children: [
             {
                 path: 'list',

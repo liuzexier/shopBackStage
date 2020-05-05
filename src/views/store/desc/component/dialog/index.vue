@@ -7,22 +7,28 @@
                 </el-form-item>
                 <el-form-item class="label" label="商品价格">
                     <!-- <el-input v-model="formData.commodityPrice" placeholder="商品价格"></el-input> -->
-                    <el-input-number v-model="formData.commodityPrice" :precision="2" :min="0" :step="1"></el-input-number>
+                    <el-input-number v-model="formData.commodityPrice" :precision="2" :min="0" :step="1">
+                    </el-input-number>
                 </el-form-item>
                 <el-form-item class="label" label="商品折扣">
                     <!-- <el-input v-model="formData.commodityDiscount" placeholder="商品折扣"></el-input> -->
-                    <el-input-number v-model="formData.commodityDiscount" :precision="2" :step="0.01" :min="0" :max="1"></el-input-number>
+                    <el-input-number v-model="formData.commodityDiscount" :precision="2" :step="0.01" :min="0" :max="1">
+                    </el-input-number>
                 </el-form-item>
                 <el-form-item class="label" label="商品数量">
-                    <el-input-number v-model="formData.commodityNumber" :precision="0" :min="0" :step="1"></el-input-number>
+                    <el-input-number v-model="formData.commodityNumber" :precision="0" :min="0" :step="1">
+                    </el-input-number>
                 </el-form-item>
                 <el-form-item class="label" label="商品类型">
                     <el-select v-model="formData.types" filterable multiple clearable placeholder="请选择">
-                        <el-option v-for="item in typeList" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
+                        <el-option v-for="item in typeList" :key="item.id" :label="item.typeName" :value="item.id">
+                        </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item class="label" label="商品图片">
-                    <el-upload :action="$uploadUrl" :file-list="fileList" list-type="picture-card" :on-success="handleSuccess" :on-remove="handleRemove" accept="image/png, image/jpeg" :multiple="true">
+                    <el-upload :action="$uploadUrl" :file-list="fileList" list-type="picture-card"
+                        :on-success="handleSuccess" :on-remove="handleRemove" accept="image/png, image/jpeg"
+                        :multiple="true">
                         <i class="el-icon-plus"></i>
                     </el-upload>
                 </el-form-item>
@@ -68,13 +74,20 @@ export default class AddGoodsDialog extends Vue {
             this.formData.commodityPrice = this.dataInfo.commodityPrice
             this.formData.commodityDiscount = this.dataInfo.commodityDiscount
             this.formData.commodityNumber = this.dataInfo.commodityNumber
-            // this.formData.images = this.dataInfo.Images
-            this.fileList = this.dataInfo.Images.map((item: any) => {
+            this.formData.images = this.dataInfo.Images.map((item: any) => {
                 return {
-                    name: item.imageName,
-                    url: this.$downloadUrl + item.imagePath
+                    fileName: item.imageName,
+                    filePath: item.imagePath
                 }
             })
+            if (this.dataInfo.Images) {
+                this.fileList = this.dataInfo.Images.map((item: any) => {
+                    return {
+                        name: item.imageName,
+                        url: this.$downloadUrl + item.imagePath
+                    }
+                })
+            }
             this.formData.types = this.dataInfo.Types.map((item: any) => {
                 return item.id
             })

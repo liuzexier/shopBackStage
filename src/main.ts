@@ -10,12 +10,18 @@ import ECharts from 'vue-echarts'
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/tooltip'
+import { Component } from "vue-property-decorator";
 import moment from 'moment'//导入moment
 import '@/icons' // icon
 import '@/permission' // permission control
-import { downloadUrl, uploadUrl } from '@/config'
+import { downloadUrl, uploadUrl, showStatus } from '@/config'
 Vue.prototype.$downloadUrl = downloadUrl
 Vue.prototype.$uploadUrl = uploadUrl
+Component.registerHooks([
+    "beforeRouteEnter",
+    "beforeRouteLeave",
+    "beforeRouteUpdate"
+]);
 
 // import 'echarts-gl'
 Vue.component('vue-echarts', ECharts)
@@ -25,16 +31,19 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 Vue.filter('date-filter', (value: any) => {
-    return moment(new Date(value).valueOf()).format('YYYY-MM-DD HH:mm:ss')
+    return value.substr(0, 19).split('T').join(' ')
 })
 Vue.filter('discount', (value: any) => {
     value = 1 - Number(value)
-    return value * 100
+    return (value * 100).toFixed(2)
 })
 Vue.filter('previewFilter', (list: any[]) => {
     return list.map((item: any) => {
         return downloadUrl + item.imagePath
     })
+})
+Vue.filter('showStatusFilter', (str: string) => {
+    return showStatus[str]
 })
 // 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI)

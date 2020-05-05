@@ -4,22 +4,16 @@ import request from '@/utils/request'
 
 export function findOrderByPage(params: any) {
     return request({
-        url: 'orders/admin/findorderbypage',
-        method: 'get',
-        params
+        url: `order/getorderlist/${params.page}/${params.pageSize}`,
+        method: 'get'
     })
 }
-export function updateOrderStatus(data: any) {
+export function changeOrderStatus(data: any) {
     return request({
-        url: 'orders/admin/updateorderstatus',
+        url: `order/changeorder/${data.status}`,
         method: 'post',
-        data
-    })
-}
-export function findOrderByUsername(params: any) {
-    return request({
-        url: 'orders/admin/findorderbyusername',
-        method: 'get',
-        params
+        data: {
+            orderId: data.orderId
+        }
     })
 }

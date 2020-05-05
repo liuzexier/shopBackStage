@@ -29,6 +29,12 @@ import Layout from '@/layout/index.vue'
  *可以访问所有角色
  */
 import { storeRouter } from '@/views/store/store.router.ts'
+import { orderRouter } from '@/views/order/order.router.ts'
+const asyncRouterMap: any = {
+    goods: require('@/views/goods/index.vue').default,
+    goodslist: require('@/views/goods/index.vue').default,
+    table: require('@/views/table/index.vue').default
+}
 
 Vue.use(Router)
 export const constantRoutes = [
@@ -52,67 +58,22 @@ export const constantRoutes = [
             path: 'dashboard',
             name: 'Dashboard',
             component: () => import('@/views/dashboard/index.vue'),
-            meta: { title: '仪表盘', icon: 'dashboard' }
+            meta: { title: '仪表盘' }
         }]
     },
+    // {
+    //     path: '/table',
+    //     component: Layout,
+    //     redirect: '/table/index',
+    //     children: [{
+    //         path: 'index',
+    //         name: 'table',
+    //         component: () => import('@/views/table/index.vue'),
+    //         meta: { title: 'table' }
+    //     }]
+    // },
     ...storeRouter,
-    {
-        path: '/goodsmanage',
-        component: Layout,
-        redirect: '/goodsmanage/table',
-        name: 'Goodsmanage',
-        meta: { title: '商品', icon: 'form' },
-        children: [
-            {
-                path: 'table',
-                name: 'Table',
-                component: () => import('@/views/goods/index.vue'),
-                meta: { title: '商品管理', icon: '' }
-            },
-            {
-                path: 'type',
-                name: 'Type',
-                component: () => import('@/views/goodstype/index.vue'),
-                meta: { title: '商品类别管理', icon: '' }
-            }
-        ]
-    },
-    {
-        path: '/user',
-        component: Layout,
-        redirect: '/user/list',
-        name: 'User',
-        meta: { title: '用户', icon: 'user' },
-        children: [
-            {
-                path: 'list',
-                name: 'list',
-                component: () => import('@/views/user/index.vue'),
-                meta: { title: '用户管理', icon: '' }
-            },
-            {
-                path: 'cart',
-                name: 'Cart',
-                component: () => import('@/views/cart/index.vue'),
-                meta: { title: '购物车管理', icon: '' }
-            }
-        ]
-    },
-    {
-        path: '/order',
-        component: Layout,
-        redirect: '/order/list',
-        name: 'Order',
-        meta: { title: '订单', icon: 'nested' },
-        children: [
-            {
-                path: 'list',
-                name: 'list',
-                component: () => import('@/views/order/index.vue'),
-                meta: { title: '订单管理', icon: '' }
-            }
-        ]
-    },
+    ...orderRouter,
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/404', hidden: true }
 ]
@@ -125,9 +86,27 @@ const createRouter: any = () => new Router(option)
 
 const router = createRouter()
 
+console.log(router)
+
 export function resetRouter() {
     const newRouter = createRouter()
     router.matcher = newRouter.matcher // reset router
 }
-
+export function addRouter(syncRouter: any[]) {
+    const syncRouterMap: any[] = syncRouter.map((item: any) => {
+        return {
+            ...item,
+            component: Layout,
+            children: item.children.map((subitem: any) => {
+                return {
+                    ...subitem,
+                    component: asyncRouterMap[subitem.component]
+                }
+            })
+        }
+    })
+    router.options.routes = [...constantRoutes, ...syncRouterMap]
+    console.log(syncRouterMap)
+    router.addRoutes(syncRouterMap)
+}
 export default router

@@ -10,7 +10,8 @@
                 <div class="edit" @click="handleEdit(item)">
                     <svg-icon style="width:100%;height:100%;" icon-class="icon-edit" />
                 </div>
-                <el-image class="image" :src="$downloadUrl + item.Image.imagePath" fit="cover"></el-image>
+                <el-image v-if="item.Image" class="image" :src="$downloadUrl + item.Image.imagePath" fit="cover"></el-image>
+                <el-image v-else class="image" fit="cover"></el-image>
                 <div style="padding: 14px;">
                     <span>{{item.storeName}}</span>
                     <div class="bottom clearfix">
