@@ -156,6 +156,8 @@ export default class StoreList extends TableMixin {
     }
 
     .pagination {
+        padding: 20px;
+        background-color: #fff;
         text-align: right;
     }
 }

@@ -30,6 +30,8 @@ import Layout from '@/layout/index.vue'
  */
 import { storeRouter } from '@/views/store/store.router.ts'
 import { orderRouter } from '@/views/order/order.router.ts'
+import { usersRouter } from '@/views/users/users.router.ts'
+
 const asyncRouterMap: any = {
     goods: require('@/views/goods/index.vue').default,
     goodslist: require('@/views/goods/index.vue').default,
@@ -74,6 +76,7 @@ export const constantRoutes = [
     // },
     ...storeRouter,
     ...orderRouter,
+    ...usersRouter,
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/404', hidden: true }
 ]

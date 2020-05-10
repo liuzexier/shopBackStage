@@ -4,6 +4,10 @@ export const statusMap = {
     DEFAULT: 'DEFAULT',
     DELEATED: 'DELEATED'
 }
+export const showStatusMap = {
+    DEFAULT: '正常',
+    DELEATED: '已删除'
+}
 export const orderStatusMap = {
     ALL: '',
     INIT: 'INIT',
@@ -21,3 +25,4 @@ export const showStatus: any = {
     COMPLETE: '已完成',
     CANCELED: '已取消'
 }
+export const userType: Array<string> = ['', '管理员', '商家', '用户']

@@ -47,7 +47,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
-import { login, register } from '@/api/user'
+import { login, register } from '@/api/users'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import aesUtil from '@/utils/aes'
 export default {

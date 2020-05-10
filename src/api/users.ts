@@ -38,6 +38,13 @@ export function getInfo(token?: any) {
     })
 }
 
+export function getAllUser(params: any) {
+    return request({
+        url: `/user/getall/${params.page}/${params.pageSize}`,
+        method: 'get'
+    })
+}
+
 export function register(data: any) {
     return request({
         url: '/user/',

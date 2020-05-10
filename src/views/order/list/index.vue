@@ -226,6 +226,8 @@ export default class OrderList extends TableMixin {
         }
     }
     .pagination {
+        padding: 20px;
+        background-color: #fff;
         text-align: right;
     }
 }

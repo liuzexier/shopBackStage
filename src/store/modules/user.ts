@@ -1,7 +1,6 @@
-import { login, getInfo } from '@/api/user'
+import { login, getInfo } from '@/api/users'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
-
 
 const state = {
     token: getToken(),
@@ -28,8 +27,8 @@ const mutations = {
 const actions = {
     // user login
     signin({ commit }: any, data: any) {
-        let user = data.user || {}
-        let token = data.token || ''
+        const user = data.user || {}
+        const token = data.token || ''
         return new Promise((resolve, reject) => {
             commit('SET_TOKEN', token)
             setToken(token)
@@ -46,6 +45,7 @@ const actions = {
                 const { dataSet }: any = response
 
                 if (!dataSet) {
+                    // eslint-disable-next-line prefer-promise-reject-errors
                     reject('验证失败,请重新登录')
                 }
                 commit('SET_USER', dataSet)
@@ -90,4 +90,3 @@ export default {
     mutations,
     actions
 }
-
