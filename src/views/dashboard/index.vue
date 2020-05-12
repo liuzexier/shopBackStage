@@ -32,6 +32,8 @@ export default class Dashboard extends Vue {
 </script>
 <style lang='less' scoped>
 .dashboard-container {
+    height: 100%;
+    // background-image: url('../../assets/img/login-bg.jpg');
     .echarts {
         width: 300px;
         height: 200px;

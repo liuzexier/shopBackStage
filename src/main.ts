@@ -5,7 +5,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss' // global css
 import App from './App.vue'
 import store from './store'
-import router from './router'
+import router, { addRouter } from '@/router/index.ts'
 import ECharts from 'vue-echarts'
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/chart/line'
@@ -15,6 +15,18 @@ import moment from 'moment'//导入moment
 import '@/icons' // icon
 import '@/permission' // permission control
 import { downloadUrl, uploadUrl, showStatus } from '@/config'
+
+const USER_ROUTER: string | null = window.sessionStorage.getItem(
+    'USER_ROUTER'
+)
+if (USER_ROUTER) {
+    try {
+        addRouter(JSON.parse(USER_ROUTER) as any)
+    } catch (error) {
+        addRouter([])
+        throw error
+    }
+}
 Vue.prototype.$downloadUrl = downloadUrl
 Vue.prototype.$uploadUrl = uploadUrl
 Component.registerHooks([

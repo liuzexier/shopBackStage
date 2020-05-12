@@ -4,7 +4,7 @@ import request from '@/utils/request'
 
 export function findOrderByPage(params: any) {
     return request({
-        url: `order/getorderlist/${params.page}/${params.pageSize}`,
+        url: `order/getorderlist/${params.page}/${params.pageSize}?orderCode=${params.orderCode}&orderStatus=${params.orderStatus}`,
         method: 'get'
     })
 }

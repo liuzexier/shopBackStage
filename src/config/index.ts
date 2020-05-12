@@ -4,7 +4,7 @@ export const statusMap = {
     DEFAULT: 'DEFAULT',
     DELEATED: 'DELEATED'
 }
-export const showStatusMap = {
+export const showStatusMap: any = {
     DEFAULT: '正常',
     DELEATED: '已删除'
 }
@@ -24,5 +24,37 @@ export const showStatus: any = {
     WAITTING: '待收货',
     COMPLETE: '已完成',
     CANCELED: '已取消'
+}
+export function userStatus(): Array<any> {
+    const arr: any[] = [{
+        label: '全部',
+        value: ''
+    }]
+    for (const key in showStatusMap) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (showStatusMap.hasOwnProperty(key)) {
+            arr.push({
+                label: showStatusMap[key],
+                value: key
+            })
+        }
+    }
+    return arr
+}
+export function orderStatus(): Array<any> {
+    const arr: any[] = [{
+        label: '全部',
+        value: ''
+    }]
+    for (const key in showStatus) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (showStatus.hasOwnProperty(key)) {
+            arr.push({
+                label: showStatus[key],
+                value: key
+            })
+        }
+    }
+    return arr
 }
 export const userType: Array<string> = ['', '管理员', '商家', '用户']

@@ -1,6 +1,9 @@
 import { login, getInfo } from '@/api/users'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+// eslint-disable-next-line import/no-duplicates
 import { resetRouter } from '@/router'
+// eslint-disable-next-line import/no-duplicates
+import { addRouter } from '@/router/index.ts'
 
 const state = {
     token: getToken(),
@@ -41,9 +44,8 @@ const actions = {
     // get user info
     getInfo({ commit, state }: any) {
         return new Promise((resolve, reject) => {
-            getInfo(state.token).then(response => {
+            getInfo(state.token).then((response: any) => {
                 const { dataSet }: any = response
-
                 if (!dataSet) {
                     // eslint-disable-next-line prefer-promise-reject-errors
                     reject('验证失败,请重新登录')
@@ -59,6 +61,8 @@ const actions = {
     // user logout
     logout({ commit, state }: any) {
         return new Promise((resolve, reject) => {
+            window.sessionStorage.removeItem('token')
+            window.sessionStorage.removeItem('USER_ROUTER')
             commit('SET_TOKEN', '')
             removeToken()
             resetRouter()

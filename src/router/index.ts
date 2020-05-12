@@ -33,9 +33,11 @@ import { orderRouter } from '@/views/order/order.router.ts'
 import { usersRouter } from '@/views/users/users.router.ts'
 
 const asyncRouterMap: any = {
-    goods: require('@/views/goods/index.vue').default,
-    goodslist: require('@/views/goods/index.vue').default,
-    table: require('@/views/table/index.vue').default
+    UserList: require('@/views/users/list/index.vue').default,
+    StoreList: require('@/views/store/list/index.vue').default,
+    StoreDesc: require('@/views/store/desc/index.vue').default,
+    AllStoreList: require('@/views/store/all/index.vue').default,
+    OrderList: require('@/views/order/list/index.vue').default
 }
 
 Vue.use(Router)
@@ -60,7 +62,7 @@ export const constantRoutes = [
             path: 'dashboard',
             name: 'Dashboard',
             component: () => import('@/views/dashboard/index.vue'),
-            meta: { title: '仪表盘' }
+            meta: { title: '仪表盘', icon: 'dashboard' }
         }]
     },
     // {
@@ -74,9 +76,9 @@ export const constantRoutes = [
     //         meta: { title: 'table' }
     //     }]
     // },
-    ...storeRouter,
-    ...orderRouter,
-    ...usersRouter,
+    // ...storeRouter,
+    // ...orderRouter,
+    // ...usersRouter,
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/404', hidden: true }
 ]
@@ -88,8 +90,6 @@ const option: any = {
 const createRouter: any = () => new Router(option)
 
 const router = createRouter()
-
-console.log(router)
 
 export function resetRouter() {
     const newRouter = createRouter()

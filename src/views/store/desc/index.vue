@@ -140,6 +140,9 @@ export default class StoreDesc extends TableMixin {
             }
         }
         .pagination {
+            border-top: 1px solid #f2f2f2;
+            padding: 20px;
+            background-color: #fff;
             text-align: right;
         }
         .center {

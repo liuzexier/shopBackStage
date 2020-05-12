@@ -30,6 +30,7 @@
 <script lang ='ts'>
 import { Vue, Prop, Component, Emit } from 'vue-property-decorator'
 import { userType, showStatusMap } from '@/config/index.ts'
+import { updateOther } from '@/api/users.ts'
 @Component
 export default class UsersDesc extends Vue {
     @Prop({ type: Boolean, default: false }) dialogShow!: boolean
@@ -51,9 +52,16 @@ export default class UsersDesc extends Vue {
         })
     }
 
-    @Emit('')
-    submit() {
-        
+    @Emit('update:dialogShow')
+    async submit() {
+        const res: any = await updateOther({
+            id: this.detailData.id,
+            userStatus: this.userStatus
+        })
+        if (res.resultCode == 'Success') {
+            this.$message.success(res.msg)
+        }
+        return false
     }
 
     @Emit('update:dialogShow')
@@ -75,6 +83,10 @@ export default class UsersDesc extends Vue {
             line-height: 1.9;
             font-size: 16px;
             color: #999;
+            border-bottom: 1px solid #f2f2f2;
+            &:last-of-type {
+                border: none;
+            }
             span {
                 color: #000;
             }

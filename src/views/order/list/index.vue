@@ -1,5 +1,13 @@
 <template>
     <div class="order-list-container">
+        <el-row class="select-bar">
+            <el-input class="input" clearable  v-model="orderCode" placeholder="请输入订单号"></el-input>
+            <el-select class="input" clearable v-model="orderStatus" placeholder="请选择状态">
+                <el-option v-for="item in orderStatusList" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+            </el-select>
+            <el-button @click="getOrderList">搜索</el-button>
+        </el-row>
         <el-table :data="tableData" style="width: 100%" @expand-change="expandChange">
             <el-table-column type="expand">
                 <template slot-scope="scope">
@@ -92,7 +100,7 @@ import { Vue, Prop, Component } from 'vue-property-decorator'
 import TableMixin from '@/mixins/table-mixin.ts'
 import { findOrderByPage, changeOrderStatus } from '@/api/order.ts'
 import { getAddressByCode } from '@/utils/area.ts'
-import { orderStatusMap } from '@/config'
+import { orderStatusMap, orderStatus } from '@/config'
 @Component({
     filters: {
         addressFilter(val: number) {
@@ -101,8 +109,12 @@ import { orderStatusMap } from '@/config'
     }
 })
 export default class OrderList extends TableMixin {
+    public pageSize: number = 6
     private tableData: any[] = []
     private orderStatusMap: any = orderStatusMap
+    private orderStatusList: any = orderStatus()
+    private orderCode: string = ''
+    private orderStatus: string = ''
 
     created() {
         this.getOrderList()
@@ -152,7 +164,9 @@ export default class OrderList extends TableMixin {
     getOrderList() {
         findOrderByPage({
             page: this.page,
-            pageSize: this.pageSize
+            pageSize: this.pageSize,
+            orderCode: this.orderCode,
+            orderStatus: this.orderStatus
         }).then((res: any) => {
             this.count = res.dataSet.count
             this.tableData = res.dataSet.rows
@@ -174,6 +188,21 @@ export default class OrderList extends TableMixin {
     /deep/.el-table__expanded-cell {
         padding: 0;
         margin: 10px 0;
+    }
+    .select-bar {
+        background-color: #fff;
+        border-bottom: 1px solid #f2f2f2;
+        display: flex;
+        padding: 10px 20px;
+        position: relative;
+        .input {
+            width: 200px;
+            margin-right: 20px;
+        }
+        .add-btn {
+            position: absolute;
+            right: 20px;
+        }
     }
     .info {
         margin: 10px;

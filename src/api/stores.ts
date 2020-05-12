@@ -6,6 +6,15 @@ export function findMyStoresByPage(params: any) {
         method: 'get'
     })
 }
+export function findAllStoresByPage(params: any) {
+    return request({
+        url: `store/getstorebyname/${params.page}/${params.pageSize}/${params.name}`,
+        method: 'get',
+        params: {
+            type: 'background'
+        }
+    })
+}
 export function createStore(data: any) {
     return request({
         url: `store/store/`,
