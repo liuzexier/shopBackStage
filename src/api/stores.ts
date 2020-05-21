@@ -39,7 +39,7 @@ export function deleteStores(data: any) {
 
 export function getGoodsByStoreAndType(params: any, query: any) {
     return request({
-        url: `/commodity/get/${params.page}/${params.pageSize}/${params.storeId}`,
+        url: `/commodity/getsignin/${params.page}/${params.pageSize}/${params.storeId}`,
         method: 'get',
         params: query
     })

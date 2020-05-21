@@ -5,10 +5,13 @@
             <el-button @click="getTableData">搜索</el-button>
         </el-row>
         <el-row class="center">
-            <el-card :span="5" v-for="item in tableData" :key="item.id" class="card" shadow="hover"
-                :body-style="{ padding: '0px' }">
-                <div class="edit" @click="handleEdit(item)">
-                    <svg-icon style="width:100%;height:100%;" icon-class="icon-edit" />
+            <el-card :span="5" v-for="item in tableData" :key="item.id" class="card"
+                :class="[item.storeStatus=='HIDDEN'?'gray':'']" shadow="hover" :body-style="{ padding: '0px' }">
+                <div v-if="item.storeStatus!='HIDDEN'" class="edit" @click="handleDelete(item)">
+                    <svg-icon style="width:100%;height:100%;" icon-class="close" />
+                </div>
+                <div v-else class="edit" @click="handleRecovery(item)">
+                    <svg-icon style="width:100%;height:100%;" icon-class="add" />
                 </div>
                 <el-image v-if="item.Image" class="image" :src="$downloadUrl + item.Image.imagePath" fit="cover">
                 </el-image>
@@ -36,7 +39,7 @@
 <script lang ='ts'>
 import { Vue, Prop, Component, Watch } from 'vue-property-decorator'
 import TableMixin from '@/mixins/table-mixin.ts'
-import { findAllStoresByPage } from '@/api/stores.ts'
+import { findAllStoresByPage, deleteStores } from '@/api/stores.ts'
 @Component
 export default class AllStoreList extends TableMixin {
     private currentDate: Date = new Date()
@@ -62,9 +65,41 @@ export default class AllStoreList extends TableMixin {
         this.dialogVisible = true
     }
 
-    handleEdit(item: any) {
-        this.storeData = item
-        this.dialogVisible = true
+    handleRecovery(item: any) {
+        this.$confirm('此操作将使店铺恢复为正常状态, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        })
+            .then(() => {
+                return deleteStores({
+                    idList: [item.id],
+                    type: 'recovery'
+                })
+            })
+            .then((res: any) => {
+                this.$message.success('恢复成功')
+                this.getTableData()
+            })
+            .catch(() => {})
+    }
+
+    handleDelete(item: any) {
+        this.$confirm('此操作将关闭店铺, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        })
+            .then(() => {
+                return deleteStores({
+                    idList: [item.id]
+                })
+            })
+            .then((res: any) => {
+                this.$message.success(res.msg || '删除成功')
+                this.getTableData()
+            })
+            .catch(() => {})
     }
 
     getTableData() {
@@ -83,6 +118,9 @@ export default class AllStoreList extends TableMixin {
 .storelist-container {
     background-color: #fff;
     padding: 10px;
+    .gray {
+        filter: grayscale(1);
+    }
     .select-bar {
         background-color: #fff;
         border-bottom: 1px solid #f2f2f2;

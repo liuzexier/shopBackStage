@@ -11,10 +11,13 @@
                 <el-button class="add-btn" type="primary" @click="addCommodity">添加商品</el-button>
             </el-row>
             <el-row class="center">
-                <el-card :span="5" v-for="item in tableData" :key="item.id" class="card" shadow="hover"
-                    :body-style="{ padding: '0px' }">
-                    <div class="edit" @click="handleEdit(item)">
+                <el-card :class="[item.commodityStatus=='HIDDEN'?'gray':'']" :span="5" v-for="item in tableData"
+                    :key="item.id" class="card" shadow="hover" :body-style="{ padding: '0px' }">
+                    <div v-if="item.commodityStatus!='HIDDEN'" class="edit" @click="handleEdit(item)">
                         <svg-icon style="width:100%;height:100%;" icon-class="icon-edit" />
+                    </div>
+                    <div v-else class="edit" @click="handleAdd(item)">
+                        <svg-icon style="width:100%;height:100%;" icon-class="add" />
                     </div>
                     <el-image v-if="item.Images[0]" class="image" :src="$downloadUrl + item.Images[0].imagePath"
                         fit="cover" :preview-src-list="item.Images|previewFilter"></el-image>
@@ -52,6 +55,7 @@ import { Vue, Prop, Component, Watch } from 'vue-property-decorator'
 import { getGoodsByStoreAndType } from '@/api/stores.ts'
 import { getAllType } from '@/api/type'
 import TableMixin from '@/mixins/table-mixin.ts'
+import { deleteCommoditys } from '../../../api/commodity'
 @Component({
     components: {
         AddGoodsDialog
@@ -79,6 +83,25 @@ export default class StoreDesc extends TableMixin {
             this.dataInfo = {}
             this.getDataList()
         }
+    }
+
+    handleAdd(item: any) {
+        this.$confirm('此操作将使店铺恢复为正常状态, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        })
+            .then(() => {
+                return deleteCommoditys({
+                    idList: [item.id],
+                    type: 'recovery'
+                })
+            })
+            .then((res: any) => {
+                this.$message.success('恢复成功')
+                this.getDataList()
+            })
+            .catch(() => {})
     }
 
     handleEdit(item: any) {
@@ -117,6 +140,9 @@ export default class StoreDesc extends TableMixin {
 </script>
 <style lang='less' scoped>
 .storedesc-container {
+    .gray {
+        filter: grayscale(1);
+    }
     .nowrap {
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -147,6 +173,7 @@ export default class StoreDesc extends TableMixin {
         }
         .center {
             // margin-top: 10px;
+            // min-width: 1155px;
             padding: 20px;
             // display: flex;
             .card {

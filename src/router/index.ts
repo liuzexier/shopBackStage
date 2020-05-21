@@ -57,13 +57,13 @@ export const constantRoutes = [
     {
         path: '/',
         component: Layout,
-        redirect: '/dashboard',
-        children: [{
-            path: 'dashboard',
-            name: 'Dashboard',
-            component: () => import('@/views/dashboard/index.vue'),
-            meta: { title: '仪表盘', icon: 'dashboard' }
-        }]
+        redirect: '/store/list'
+        // children: [{
+        //     path: 'dashboard',
+        //     name: 'Dashboard',
+        //     component: () => import('@/views/dashboard/index.vue'),
+        //     meta: { title: '仪表盘', icon: 'dashboard' }
+        // }]
     },
     // {
     //     path: '/table',
@@ -109,7 +109,6 @@ export function addRouter(syncRouter: any[]) {
         }
     })
     router.options.routes = [...constantRoutes, ...syncRouterMap]
-    console.log(syncRouterMap)
     router.addRoutes(syncRouterMap)
 }
 export default router
