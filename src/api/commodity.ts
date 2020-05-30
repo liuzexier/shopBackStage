@@ -21,3 +21,9 @@ export function updateCommoditys(data: any) {
         data
     })
 }
+export function resetCommodity(data: any) {
+    return request({
+        url: 'commodity/reset/' + data.id,
+        method: 'post'
+    })
+}

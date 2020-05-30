@@ -19,7 +19,7 @@
                 <div style="padding: 14px;">
                     <span>{{item.storeName}}</span>
                     <div class="bottom clearfix">
-                        <router-link :to="'desc/' + item.id">
+                        <router-link :to="'alldesc/' + item.id">
                             <el-button type="text" class="button">进入店铺</el-button>
                         </router-link>
                         <el-tooltip class="item" effect="dark" :content="item.storeDesc" placement="top">

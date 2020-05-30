@@ -37,6 +37,7 @@ const asyncRouterMap: any = {
     StoreList: require('@/views/store/list/index.vue').default,
     StoreDesc: require('@/views/store/desc/index.vue').default,
     AllStoreList: require('@/views/store/all/index.vue').default,
+    AllStoreDesc: require('@/views/store/alldesc/index.vue').default,
     OrderList: require('@/views/order/list/index.vue').default
 }
 
